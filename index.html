@@ -1128,6 +1128,34 @@ body.vx-celebrating .shell{visibility:hidden}
 .vx-celebrate *{backdrop-filter:none !important}
 #vxFx{will-change:transform;transform:translateZ(0)}
 .vx-cel-photo,.vx-cel-logo,.vx-cel-title span,.vx-cel-name,.vx-cel-stats{will-change:transform,opacity}
+
+/* ===== TV: cards de cima somem na cena de plataforma; números grandes ===== */
+body.vx-plat .vx-kpis{display:none}
+.vx-scene{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px}
+.vx-gauge{width:clamp(220px,17vw,340px)}
+.vx-gauge-side{gap:20px;width:100%}
+.vx-metrics{grid-template-columns:1fr;gap:14px}
+.vx-metric{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:12px 30px;border-radius:22px;text-align:left}
+.vx-metric span{font-size:clamp(16px,1.35vw,28px);letter-spacing:3px;max-width:34%;line-height:1.15}
+.vx-metric b{margin:0;font-size:clamp(40px,4vw,84px);line-height:1.05;text-align:right}
+
+/* ===== TV: foto grande, nome embaixo, tudo centralizado ===== */
+.vx-hero{flex-direction:column;justify-content:center;text-align:center;gap:clamp(18px,3vh,34px)}
+.vx-photo-wrap{width:clamp(240px,38vh,440px)}
+.vx-photo-wrap::before{inset:-12px;border-radius:44px}
+.vx-photo-wrap::after{inset:-5px;border-radius:38px}
+.vx-photo{border-radius:34px}
+.vx-hero-info{align-items:center;gap:10px;width:100%}
+.vx-kicker{font-size:clamp(16px,1.3vw,26px);letter-spacing:6px}
+.vx-name{font-size:clamp(36px,3.7vw,76px);line-height:1;text-align:center}
+.vx-stamp{align-self:center;margin-top:8px;font-size:clamp(18px,1.6vw,30px)}
+
+/* ===== TV: sem faixa AO VIVO embaixo; selo FALTAM maior ===== */
+.vx-ticker{display:none !important}
+.vx-stamp{font-size:clamp(24px,2.3vw,46px);line-height:1.1;padding:12px 26px;border-radius:18px;letter-spacing:1px;margin-top:12px;white-space:nowrap;text-align:center}
+
+/* FALTA: só o número em vermelho */
+.vx-metric.falta b{color:#ff4d4f;text-shadow:0 0 28px rgba(255,60,70,.55)}
 .vx-sound{position:fixed;right:22px;bottom:22px;z-index:9999;display:none;align-items:center;gap:10px;padding:12px 18px;border-radius:999px;border:1px solid rgba(24,193,232,.5);background:rgba(2,18,22,.9);color:#fff;font:700 14px var(--vx-font);letter-spacing:1px;cursor:pointer;box-shadow:0 0 30px rgba(24,193,232,.35);animation:vxPulse 2s ease-in-out infinite}
 .vx-sound.show{display:flex}
 .vx-test-btn{margin-top:4px}
@@ -5544,6 +5572,7 @@ function vxTimerHtml(label, totalMs){
 function renderTVSceneTable(ds){
   const stage = document.getElementById('tvSceneStage');
   if(!stage) return;
+  document.body.classList.remove('vx-plat');
   const fresh = vxIsFresh();
   // O ciclo de cenas do script original guarda o "ds" da primeira carga e o
   // reusa ao voltar para a tabela; sempre lê os dados atuais para não mostrar
@@ -5574,6 +5603,7 @@ function renderTVSceneTable(ds){
 function renderTVPlatformScene(row, position, total){
   const stage = document.getElementById('tvSceneStage');
   if(!stage || !row) return;
+  document.body.classList.add('vx-plat');
   const fresh = vxIsFresh();
   const s = vxStatus(row);
   const hit = vxHit(row);
@@ -5604,7 +5634,7 @@ function renderTVPlatformScene(row, position, total){
       <div class="vx-metrics">
         <div class="vx-metric hl"><span>Total</span><b>${fmtMoney(row.total)}</b></div>
         <div class="vx-metric${sm ? ' super' : ''}"><span>${sm ? 'Meta Super Mês' : 'Meta'}</span><b>${fmtMoney(row.meta)}</b></div>
-        <div class="vx-metric"><span>${hit ? 'Acima' : 'Falta'}</span><b>${fmtMoney(hit ? (row.total || 0) - (row.meta || 0) : falta)}</b></div>
+        <div class="vx-metric${hit ? '' : ' falta'}"><span>${hit ? 'Acima' : 'Falta'}</span><b>${fmtMoney(hit ? (row.total || 0) - (row.meta || 0) : falta)}</b></div>
       </div>
     </div>
   </div>${vxTimerHtml(`Plataforma ${position + 1} de ${total}`, TV_PLATFORM_DURATION)}`;
